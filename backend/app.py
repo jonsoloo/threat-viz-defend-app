@@ -26,8 +26,8 @@ MAX_ACCOUNTS = int(os.environ.get("MAX_ACCOUNTS", "250"))
 SESSION_SECONDS = 8 * 60 * 60
 USERNAME = re.compile(r"^[a-zA-Z0-9_]{3,40}$")
 
-if not DATABASE_URL or not SITE_ORIGIN or len(ACCESS_CODE) < 24:
-    raise RuntimeError("Set DATABASE_URL, SITE_ORIGIN and a random ACCESS_CODE of at least 24 characters")
+if not SITE_ORIGIN or len(ACCESS_CODE) < 24:
+    raise RuntimeError("Set SITE_ORIGIN and a random ACCESS_CODE of at least 24 characters")
 if not SITE_ORIGIN.startswith("https://") and COOKIE_SECURE:
     raise RuntimeError("SITE_ORIGIN must use HTTPS in production")
 
@@ -43,6 +43,8 @@ def db():
 
 def init_db():
     with db() as conn:
+        # Prevent concurrent workers from racing to create PostgreSQL types.
+        conn.execute("SELECT pg_advisory_xact_lock(74123900)")
         conn.execute("""CREATE TABLE IF NOT EXISTS users (
             id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
             username TEXT NOT NULL UNIQUE,
@@ -62,7 +64,26 @@ def init_db():
         )""")
 
 
-init_db()
+schema_ready = False
+
+
+@app.before_request
+def ensure_db_ready():
+    # App Platform grants dev-database schema permissions only once its first
+    # deployment succeeds. Creating tables on module import deadlocks startup:
+    # a worker cannot boot, so the platform cannot complete the deployment.
+    # Keep health available, then initialize on the first real API request.
+    global schema_ready
+    if request.path == "/health" or schema_ready:
+        return None
+    if not DATABASE_URL:
+        return error("Accounts are starting up. Please try again shortly.", 503)
+    try:
+        init_db()
+        schema_ready = True
+    except psycopg.Error:
+        app.logger.exception("Database initialization unavailable")
+        return error("Accounts are starting up. Please try again shortly.", 503)
 
 
 def error(message, status):
