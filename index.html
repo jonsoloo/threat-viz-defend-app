@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#09111c" />
+    <meta name="description" content="ThreatVizDefend scans code and maps what it does, where data flows, and where possible security vulnerabilities may occur." />
+    <title>Threat Viz Defend</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="config.js" defer></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#home" aria-label="Threat Viz Defend home"><span class="brand-mark">//</span> THREAT<span class="brand-accent">VIZ</span>DEFEND</a>
+      <span class="header-label">CODE RISKS / VISUALIZED <span class="status-dot"></span></span>
+      <button id="header-action" class="header-action" type="button" hidden>Log out</button>
+    </header>
+    <main id="main">
+      <section id="home" class="screen home-screen" aria-labelledby="home-title">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="eyebrow-line"></span> MAKE CODE RISKS VISIBLE</p>
+          <h1 id="home-title">See the code.<br /><em>Understand the threat.</em></h1>
+          <p class="lead">Scan code and see a clear diagram of what it does. Follow how data moves through the program, where a possible vulnerability appears, and what could happen next.</p>
+          <div class="hero-actions"><button type="button" class="button button-primary" data-view="signup">Create an account <span aria-hidden="true">↗</span></button><button type="button" class="button button-outline" data-view="login">Log in</button></div>
+          <p class="hero-note"><span aria-hidden="true">✦</span> Create an account, then enter your access code</p>
+        </div>
+        <div class="hero-art" role="img" aria-label="Example: sample code is scanned, then a threat diagram shows user input flowing into a shell command with a possible command injection risk.">
+          <div class="code-window" aria-hidden="true">
+            <div class="code-window-header"><span class="window-dots"><i></i><i></i><i></i></span><span>commands.js</span><span class="code-window-state"><span class="status-dot"></span> REVIEWING CODE</span></div>
+            <div class="code-area">
+              <div class="code-row"><span class="line-no">01</span><code><span class="syntax-purple">function</span> runCommand(userInput) {</code></div>
+              <div class="code-row"><span class="line-no">02</span><code>  <span class="syntax-blue">const</span> command = <span class="syntax-green">"git "</span> + userInput;</code></div>
+              <div class="code-row"><span class="line-no">03</span><code> </code></div>
+              <div class="code-row risk-row"><span class="line-no">04</span><code>  exec(command);</code><span class="risk-marker">!</span></div>
+              <div class="code-row"><span class="line-no">05</span><code>}</code></div>
+              <div class="scan-line"></div>
+            </div>
+            <div class="code-window-footer">SAMPLE CODE <span>↓ THREAT DIAGRAM</span></div>
+          </div>
+          <div class="hero-threat-diagram" aria-hidden="true"><span class="hero-diagram-label">POSSIBLE THREAT PATH</span><div class="hero-flow"><span>USER INPUT</span><b>→</b><span>COMMAND BUILDER</span><b>→</b><span class="hero-risk-node">SHELL EXECUTION</span></div><p><strong>!</strong> Untrusted input may change the command the program runs.</p></div>
+          <span class="visual-caption">ILLUSTRATIVE EXAMPLE · NOT A LIVE SCAN</span>
+        </div>
+      </section>
+
+      <section id="signup" class="screen form-screen" hidden aria-labelledby="signup-title">
+        <div class="form-panel"><p class="eyebrow">01 / GET STARTED</p><h1 id="signup-title">Create your account.</h1><p class="section-lead">Sign up to scan code and explore possible threats in a diagram. You'll enter your access code after signing in.</p>
+          <form id="signup-form"><label for="signup-username">Username</label><input id="signup-username" name="username" autocomplete="username" minlength="3" maxlength="40" required placeholder="Choose a username" /><label for="signup-password">Password</label><input id="signup-password" name="password" type="password" autocomplete="new-password" minlength="12" required placeholder="At least 12 characters" /><button class="button button-primary form-submit" type="submit">Create account <span aria-hidden="true">↗</span></button><p class="form-message" role="alert" aria-live="polite"></p></form><p class="switch-form">Already have an account? <button type="button" class="text-button" data-view="login">Log in</button></p>
+        </div><div class="side-panel"><span class="side-index">TVD / 001</span><div class="side-graphic">&lt; / &gt;</div><p>Security starts with curiosity.</p></div>
+      </section>
+
+      <section id="login" class="screen form-screen" hidden aria-labelledby="login-title">
+        <div class="form-panel"><p class="eyebrow">02 / WELCOME BACK</p><h1 id="login-title">Log in.</h1><p class="section-lead">Your workspace is waiting.</p>
+          <form id="login-form"><label for="login-username">Username</label><input id="login-username" name="username" autocomplete="username" required placeholder="Your username" /><label for="login-password">Password</label><input id="login-password" name="password" type="password" autocomplete="current-password" required placeholder="Your password" /><button class="button button-primary form-submit" type="submit">Log in <span aria-hidden="true">↗</span></button><p class="form-message" role="alert" aria-live="polite"></p></form><p class="switch-form">New here? <button type="button" class="text-button" data-view="signup">Create an account</button></p>
+        </div><div class="side-panel"><span class="side-index">TVD / 002</span><div class="side-graphic">{ }</div><p>Find the signal in the noise.</p></div>
+      </section>
+
+      <section id="access" class="screen form-screen" hidden aria-labelledby="access-title">
+        <div class="form-panel"><p class="eyebrow">03 / ONE MORE STEP</p><h1 id="access-title">Enter your access code.</h1><p class="section-lead">Enter the code you received to unlock your workspace.</p>
+          <form id="access-form"><label for="access-code">Access code</label><input id="access-code" name="code" type="password" autocomplete="off" spellcheck="false" required placeholder="Enter your code" /><button class="button button-primary form-submit" type="submit">Unlock workspace <span aria-hidden="true">↗</span></button><p class="form-message" role="alert" aria-live="polite"></p></form><p class="small-note">Need access? Contact the person who invited you.</p>
+        </div><div class="side-panel"><span class="side-index">TVD / 003</span><div class="side-graphic">[ + ]</div><p>Access granted to the curious.</p></div>
+      </section>
+
+      <section id="workspace" class="screen workspace-screen" hidden aria-labelledby="workspace-title">
+        <div class="workspace-heading"><p class="eyebrow">YOUR WORKSPACE / CODE &amp; THREATS</p><h1 id="workspace-title">See how a threat could unfold.</h1><p class="section-lead">Paste code to see what it does, how data moves, and where potential vulnerabilities could occur. Review the findings alongside the diagram.</p></div>
+        <div class="workspace-grid"><div class="work-card"><span class="card-number">01 / SAMPLE</span><h2>Scan code</h2><form id="analyze-form"><label for="code-input">Code sample</label><textarea id="code-input" name="code" rows="12" maxlength="20000" required placeholder="Paste code for a threat review..."></textarea><p class="input-hint">Do not submit passwords, API keys, or private credentials.</p><button class="button button-primary" type="submit">Scan code <span aria-hidden="true">↗</span></button><p class="form-message" role="alert" aria-live="polite"></p></form></div><div class="work-card results-card"><span class="card-number">02 / RISK REVIEW</span><h2>Possible vulnerabilities</h2><div id="results" class="results-empty" aria-live="polite"><span class="empty-icon" aria-hidden="true">◎</span><p>Submit code to see possible risks and suggested safeguards.</p></div></div></div>
+        <div class="activity-card"><div class="activity-header"><div><span class="card-number">03 / THREAT DIAGRAM</span><h2>How the code works and where risks appear</h2></div><span id="diagram-status" class="activity-status" role="status">Waiting for code</span></div><div id="threat-diagram" class="threat-diagram" aria-live="polite"><p class="activity-empty">The threat diagram will appear after a scan.</p></div><p class="input-hint">The diagram shows data flow and possible risk points reported by the scan. Review each finding before making changes.</p></div>
+      </section>
+    </main>
+    <footer class="site-footer"><span>© THREATVIZDEFEND</span><span>SCAN CODE / MAP THREATS</span></footer>
+  </body>
+</html>
